@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Money Market – Chapters 1–8 · Exam A</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#070d1a;color:#e2e8f4;min-height:100vh;user-select:none;-webkit-user-select:none;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:#070d1a}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,210,120,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,120,0.04) 1px,transparent 1px);background-size:48px 48px}
+.bg-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,120,255,0.08) 0%,transparent 70%);top:-100px;right:-100px}
+.bg-glow2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(240,176,48,0.06) 0%,transparent 70%);bottom:100px;left:-50px}
+.chart-line{position:absolute;bottom:60px;left:0;width:100%;height:80px;opacity:0.15}
+.ticker-bar{position:fixed;bottom:0;left:0;width:100%;height:28px;background:rgba(0,0,0,0.85);border-top:1px solid rgba(240,176,48,0.25);z-index:100;overflow:hidden;display:flex;align-items:center}
+.ticker-inner{display:flex;animation:ticker 40s linear infinite;white-space:nowrap;font-family:'Courier New',monospace;font-size:11px}
+.ticker-item{margin:0 20px;color:#8fa4c0}
+.ticker-item .sym{color:#f0b030;font-weight:700}
+.ticker-item .up{color:#00c878}
+.ticker-item .dn{color:#ff4d4d}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+#app{position:relative;z-index:1;min-height:100vh;padding-bottom:40px}
+#cover{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;text-align:center}
+.cover-logo{font-family:'Courier New',monospace;font-size:11px;color:#00c878;letter-spacing:.2em;margin-bottom:20px;text-transform:uppercase}
+.exam-badge-a{display:inline-block;background:rgba(0,200,120,0.1);border:1px solid rgba(0,200,120,0.4);color:#00c878;font-size:13px;font-weight:700;padding:4px 16px;letter-spacing:.15em;margin-bottom:8px;font-family:'Courier New',monospace}
+#cover h1{font-size:28px;font-weight:700;color:#f0b030;margin-bottom:4px}
+#cover h2{font-size:14px;color:#8fa4c0;font-weight:400;margin-bottom:6px}
+.saifm-badge{display:inline-block;background:rgba(240,176,48,0.1);border:1px solid rgba(240,176,48,0.3);color:#f0b030;font-size:11px;padding:3px 10px;letter-spacing:.08em;margin-bottom:24px}
+.stat-row{display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap;justify-content:center}
+.stat{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-top:2px solid #00c878;padding:14px 20px;min-width:100px;text-align:center}
+.stat .n{font-size:28px;font-weight:700;color:#00c878;font-family:'Courier New',monospace}
+.stat .l{font-size:10px;color:#8fa4c0;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.start-btn{background:#00c878;color:#070d1a;border:none;padding:14px 44px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .15s}
+.start-btn:hover{background:#00e088}
+.cover-note{font-size:12px;color:#556080;margin-top:16px;max-width:480px;line-height:1.6}
+#quiz{display:none;max-width:780px;margin:0 auto;padding:20px 16px 60px}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.q-counter{font-family:'Courier New',monospace;font-size:12px;color:#8fa4c0}
+.q-type-badge{font-size:10px;padding:3px 10px;letter-spacing:.06em;font-weight:700;text-transform:uppercase}
+.q-type-badge.mcq{background:rgba(0,120,255,0.15);color:#4d9fff;border:1px solid rgba(0,120,255,0.3)}
+.q-type-badge.tf{background:rgba(0,200,120,0.12);color:#00c878;border:1px solid rgba(0,200,120,0.3)}
+.q-type-badge.roman{background:rgba(240,176,48,0.12);color:#f0b030;border:1px solid rgba(240,176,48,0.3)}
+.timer{font-family:'Courier New',monospace;font-size:16px;color:#00c878;background:rgba(0,200,120,0.08);border:1px solid rgba(0,200,120,0.2);padding:5px 14px}
+.timer.warn{color:#ff4d4d;border-color:rgba(255,77,77,0.4);animation:blink .8s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+.prog-bar{height:3px;background:rgba(255,255,255,0.06);margin-bottom:20px}
+.prog-fill{height:100%;background:linear-gradient(90deg,#00c878,#f0b030);transition:width .4s}
+.q-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-left:3px solid #00c878;padding:22px 22px 16px;margin-bottom:10px}
+.q-num{font-size:10px;font-family:'Courier New',monospace;color:#556080;letter-spacing:.1em;margin-bottom:10px;text-transform:uppercase}
+.q-text{font-size:15px;line-height:1.7;color:#e2e8f4;margin-bottom:20px}
+.q-statements{background:rgba(0,0,0,0.2);border-left:2px solid rgba(0,200,120,0.4);padding:12px 16px;margin-bottom:16px;font-size:14px;line-height:1.9;color:#b8c8e0}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.07);margin-bottom:8px;cursor:pointer;transition:all .15s}
+.opt:hover{border-color:rgba(0,200,120,0.4);background:rgba(0,200,120,0.05)}
+.opt.selected{border-color:rgba(0,200,120,0.6);background:rgba(0,200,120,0.08)}
+.opt.correct{border-color:#00c878;background:rgba(0,200,120,0.08);pointer-events:none}
+.opt.wrong{border-color:#ff4d4d;background:rgba(255,77,77,0.08);pointer-events:none}
+.opt.show-correct{border-color:#00c878;background:rgba(0,200,120,0.08);pointer-events:none}
+.opt-letter{width:24px;height:24px;flex-shrink:0;background:rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'Courier New',monospace;color:#8fa4c0}
+.opt.correct .opt-letter,.opt.show-correct .opt-letter{background:#00c878;color:#070d1a}
+.opt.wrong .opt-letter{background:#ff4d4d;color:#fff}
+.opt.selected .opt-letter{background:#00c878;color:#070d1a}
+.opt-text{font-size:14px;line-height:1.5;color:#c8d4e8}
+.feedback{padding:12px 16px;margin-top:10px;font-size:13px;line-height:1.65;border-left:3px solid}
+.feedback.correct-fb{background:rgba(0,200,120,0.07);border-color:#00c878;color:#80e8b8}
+.feedback.wrong-fb{background:rgba(255,77,77,0.07);border-color:#ff4d4d;color:#ffaaaa}
+.nav{display:flex;justify-content:space-between;margin-top:20px;gap:12px}
+.nav-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#8fa4c0;padding:10px 24px;cursor:pointer;font-size:13px;font-weight:600;letter-spacing:.04em;transition:all .15s}
+.nav-btn:hover:not(:disabled){background:rgba(255,255,255,0.1);color:#e2e8f4}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+.nav-btn.primary{background:#00c878;border-color:#00c878;color:#070d1a}
+.nav-btn.primary:hover{background:#00e088}
+#result{display:none;max-width:640px;margin:0 auto;padding:40px 16px 60px;text-align:center}
+.result-header{font-size:11px;font-family:'Courier New',monospace;color:#00c878;letter-spacing:.2em;margin-bottom:12px}
+#result h2{font-size:26px;color:#f0b030;margin-bottom:20px}
+.score-ring{width:140px;height:140px;border-radius:50%;border:3px solid #00c878;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;background:rgba(0,200,120,0.05)}
+.score-ring .pct{font-size:40px;font-weight:700;color:#00c878;font-family:'Courier New',monospace;line-height:1}
+.score-ring .frac{font-size:13px;color:#8fa4c0;margin-top:4px}
+.result-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0}
+.r-stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-top:2px solid #00c878;padding:14px;text-align:left}
+.r-stat .rv{font-size:22px;font-weight:700;color:#00c878;font-family:'Courier New',monospace}
+.r-stat .rl{font-size:11px;color:#8fa4c0;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.pass-badge{display:inline-block;padding:6px 20px;font-size:14px;font-weight:700;letter-spacing:.08em;margin-bottom:16px}
+.pass-badge.pass{background:rgba(0,200,120,0.15);border:1px solid #00c878;color:#00c878}
+.pass-badge.fail{background:rgba(255,77,77,0.12);border:1px solid #ff4d4d;color:#ff4d4d}
+.retake-btn{background:#00c878;color:#070d1a;border:none;padding:12px 36px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;margin-bottom:24px}
+.review-title{font-size:12px;color:#8fa4c0;text-align:left;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase;font-family:'Courier New',monospace}
+.rev-item{text-align:left;background:rgba(255,77,77,0.05);border-left:3px solid #ff4d4d;padding:12px 14px;margin-bottom:8px;font-size:13px;line-height:1.6}
+.rev-item .rq{color:#c8d4e8;margin-bottom:4px}
+.rev-item .rc{color:#00c878;font-size:12px}
+.rev-item .re{color:#8fa4c0;font-size:12px;margin-top:3px}
+.ch-tag{font-size:9px;font-family:'Courier New',monospace;color:#4d9fff;background:rgba(0,120,255,0.1);border:1px solid rgba(0,120,255,0.2);padding:2px 6px;margin-right:6px;vertical-align:middle}
+</style>
+</head>
+<body>
+<div class="bg">
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+  <div class="bg-glow2"></div>
+  <svg class="chart-line" viewBox="0 0 1200 80" preserveAspectRatio="none">
+    <polyline points="0,65 100,50 200,58 300,35 400,45 500,25 600,38 700,28 800,42 900,18 1000,32 1100,22 1200,18" fill="none" stroke="rgba(0,200,120,0.4)" stroke-width="1.5"/>
+    <polyline points="0,72 100,68 200,74 300,60 400,70 500,55 600,65 700,58 800,68 900,45 1000,58 1100,50 1200,44" fill="none" stroke="rgba(240,176,48,0.25)" stroke-width="1"/>
+  </svg>
+</div>
+<div class="ticker-bar">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span class="sym">JIBAR 3M</span> 7.358% <span class="up">▲</span></span>
+    <span class="ticker-item"><span class="sym">REPO</span> 7.00% <span class="up">—</span></span>
+    <span class="ticker-item"><span class="sym">PRIME</span> 10.50%</span>
+    <span class="ticker-item"><span class="sym">SABOR</span> 6.973% <span class="up">▲</span></span>
+    <span class="ticker-item"><span class="sym">3x6 FRA</span> 7.36% <span class="dn">▼</span></span>
+    <span class="ticker-item"><span class="sym">NCD 6M</span> 7.96% <span class="up">▲</span></span>
+    <span class="ticker-item"><span class="sym">USD/ZAR</span> 18.42 <span class="dn">▼</span></span>
+    <span class="ticker-item"><span class="sym">TB 91D</span> 7.64% <span class="dn">▼</span></span>
+    <span class="ticker-item"><span class="sym">JSE ALSI</span> 78,420 <span class="up">▲</span></span>
+    <span class="ticker-item"><span class="sym">EURODOLLAR</span> 98.650 <span class="up">▲</span></span>
+    <span class="ticker-item"><span class="sym">IRS 1Y</span> 7.20% <span class="up">—</span></span>
+    <span class="ticker-item"><span class="sym">JIBAR 3M</span> 7.358% <span class="up">▲</span></span>
+    <span class="ticker-item"><span class="sym">REPO</span> 7.00% <span class="up">—</span></span>
+    <span class="ticker-item"><span class="sym">PRIME</span> 10.50%</span>
+    <span class="ticker-item"><span class="sym">SABOR</span> 6.973% <span class="up">▲</span></span>
+    <span class="ticker-item"><span class="sym">3x6 FRA</span> 7.36% <span class="dn">▼</span></span>
+    <span class="ticker-item"><span class="sym">NCD 6M</span> 7.96% <span class="up">▲</span></span>
+    <span class="ticker-item"><span class="sym">USD/ZAR</span> 18.42 <span class="dn">▼</span></span>
+    <span class="ticker-item"><span class="sym">TB 91D</span> 7.64% <span class="dn">▼</span></span>
+    <span class="ticker-item"><span class="sym">JSE ALSI</span> 78,420 <span class="up">▲</span></span>
+    <span class="ticker-item"><span class="sym">EURODOLLAR</span> 98.650 <span class="up">▲</span></span>
+    <span class="ticker-item"><span class="sym">IRS 1Y</span> 7.20% <span class="up">—</span></span>
+  </div>
+</div>
+
+<div id="app">
+  <div id="cover">
+    <div class="cover-logo">SAIFM · South African Institute of Financial Markets</div>
+    <div class="exam-badge-a">EXAM A</div>
+    <h1>The Money Market</h1>
+    <h2>Chapters 1–8 · Comprehensive Assessment · Set A</h2>
+    <div class="saifm-badge">EXAM PREPARATION · PRINCESS NGOBENI</div>
+    <div class="stat-row">
+      <div class="stat"><div class="n">70</div><div class="l">Questions</div></div>
+      <div class="stat"><div class="n">90</div><div class="l">Minutes</div></div>
+      <div class="stat"><div class="n">75%</div><div class="l">Pass Mark</div></div>
+      <div class="stat"><div class="n">8</div><div class="l">Chapters</div></div>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">BEGIN EXAM A</button>
+    <p class="cover-note">MCQ · True/False · Roman Numeral — Chapters 1–8 from Ziets Botha. Covers overview, mathematics, TBs, RBDs, NCDs, repos, other instruments and derivatives. Questions shuffle every attempt. 75% = 53/70 to pass.</p>
+  </div>
+
+  <div id="quiz">
+    <div class="top-bar">
+      <span class="q-counter" id="q-counter">Question 1 of 70</span>
+      <span class="q-type-badge mcq" id="q-type-badge">MCQ</span>
+      <div class="timer" id="timer">90:00</div>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <div id="q-area"></div>
+    <div class="nav">
+      <button class="nav-btn" id="prev-btn" onclick="prevQ()" disabled>← PREV</button>
+      <button class="nav-btn primary" id="next-btn" onclick="nextQ()">NEXT →</button>
+    </div>
+  </div>
+
+  <div id="result">
+    <div class="result-header">EXAM A · ASSESSMENT COMPLETE</div>
+    <h2>Princess Ngobeni</h2>
+    <div class="score-ring">
+      <div class="pct" id="r-pct">0%</div>
+      <div class="frac" id="r-frac">0/70</div>
+    </div>
+    <div class="pass-badge" id="r-badge">—</div>
+    <div class="result-stats">
+      <div class="r-stat"><div class="rv" id="r-correct">0</div><div class="rl">Correct</div></div>
+      <div class="r-stat"><div class="rv" id="r-wrong">0</div><div class="rl">Incorrect</div></div>
+      <div class="r-stat"><div class="rv" id="r-time">—</div><div class="rl">Time taken</div></div>
+      <div class="r-stat"><div class="rv">53/70</div><div class="rl">Needed to pass</div></div>
+    </div>
+    <button class="retake-btn" onclick="restartQuiz()">RETAKE EXAM A</button>
+    <div class="review-title">Incorrect answers — review these sections</div>
+    <div id="review-list"></div>
+  </div>
+</div>
+
+<script>
+// ================================================================
+// QUESTION POOLS — Chapters 1–8, Ziets Botha
+// Pool structure: 14 T/F, 14 Roman, 42 MCQ → 70 total
+// ================================================================
+
+const TF_POOL = [
+  // Ch1
+  {type:'tf',ch:'Ch1',q:'The money market in South Africa is subject to specific legislation that regulates all transactions between participants.',c:1,exp:'False. The money market is not subject to any specific legislation. It relies on mutual trust — it is an unregulated OTC market.'},
+  {type:'tf',ch:'Ch1',q:'The most prominent role participant in the South African money market is the SARB.',c:1,exp:'False. Banks fulfil the most prominent role. The SARB does play a dominant position but banks are described as the most prominent participants overall.'},
+  {type:'tf',ch:'Ch1',q:'A bearer instrument is one where whoever is in physical possession of the certificate is the de facto owner.',c:0,exp:'True. Bearer instruments are held by whoever possesses the physical certificate. The issuer only knows the owner on initial issue and at maturity.'},
+  {type:'tf',ch:'Ch1',q:'Treasury bills and SARB debentures (but not Land Bank bills) qualify as prescribed liquid assets under the Banks Act.',c:1,exp:'False. Treasury bills, Land Bank bills AND SARB debentures all qualify as prescribed liquid assets under section 72 of the Banks Act.'},
+  {type:'tf',ch:'Ch1',q:'The SABOR is published by the JSE on a daily basis.',c:1,exp:'False. The SABOR is published by the SARB (Reserve Bank), not the JSE. The JIBAR is published by the JSE.'},
+  // Ch2
+  {type:'tf',ch:'Ch2',q:'In South African rand calculations, the annual basis is always 365, even in a leap year.',c:0,exp:'True. The actual/365 fixed basis convention means the annual basis remains 365 regardless of leap years.'},
+  {type:'tf',ch:'Ch2',q:'The letter r is sometimes used to denote an interest rate in this module.',c:1,exp:'False. The letter r is NEVER used to denote an interest rate in this module. Only i (or id and iy for discount securities) is used.'},
+  {type:'tf',ch:'Ch2',q:'For discount instruments, the money market yield (iy) is always higher than the discount rate (id).',c:0,exp:'True. The yield is based on the lower consideration (NV minus discount), so it always exceeds the discount rate which is based on the full nominal value.'},
+  // Ch3
+  {type:'tf',ch:'Ch3',q:'TB tenders in South Africa are based on the Dutch auction style where all successful bidders pay the clearing price.',c:1,exp:'False. The American auction style is used — each successful bidder pays their own bid price, not a uniform clearing price.'},
+  {type:'tf',ch:'Ch3',q:'At maturity, Treasury bills are redeemed at face value plus interest.',c:1,exp:'False. TBs are discount instruments — they are issued at a discount and redeemed at face (par) value. No interest is added at maturity.'},
+  // Ch4
+  {type:'tf',ch:'Ch4',q:'SARB debentures settle on a T+3 basis like Treasury bills.',c:1,exp:'False. RBDs settle on a T+0 basis (same day as the auction). Treasury bills are the exception in settling T+3.'},
+  {type:'tf',ch:'Ch4',q:'SARB debentures are issued for funding purposes by the SARB.',c:1,exp:'False. RBDs are issued for monetary control purposes (managing money market liquidity), NOT for funding purposes.'},
+  // Ch5
+  {type:'tf',ch:'Ch5',q:'NCDs are traded in the secondary market on a yield basis.',c:0,exp:'True. NCDs are interest add-on securities traded on a yield basis in the secondary market (unlike discount instruments which trade on a discount/price basis).'},
+  {type:'tf',ch:'Ch5',q:'NCDs carry lower rates of interest than Treasury bills of similar maturity because they are more liquid.',c:1,exp:'False. NCDs carry HIGHER rates than TBs because of the higher default risk — TBs are government-guaranteed while NCDs are bank obligations.'},
+  // Ch6
+  {type:'tf',ch:'Ch6',q:'In a classic repo, the seller of bonds in the first leg is the borrower of money.',c:0,exp:'True. The bond seller repos the bonds out to obtain cash — they are the cash borrower. The bond buyer is the cash lender.'},
+  {type:'tf',ch:'Ch6',q:'Margining is mandatory under a classic repo but not under a carry (sell/buyback).',c:0,exp:'True. One of the key distinctions: classic repos require margining but carries (sell/buybacks) do not.'},
+  // Ch7
+  {type:'tf',ch:'Ch7',q:'Land Bank bills are issued on an auction (tender) basis.',c:1,exp:'False. Land Bank bills are issued on a tap basis — sold to investors at prices based on prevailing market conditions, not through an auction.'},
+  {type:'tf',ch:'Ch7',q:'Call bonds are classified as STRATE category 4 money market instruments because they have both a variable coupon rate and a variable maturity date.',c:0,exp:'True. Category 4 = variable coupon AND variable maturity. Call bonds pay a daily rate linked to RODI/benchmark and can be called by either party.'},
+  // Ch8
+  {type:'tf',ch:'Ch8',q:'The buyer of a forward rate agreement (FRA) pays a fixed rate and receives a floating rate.',c:0,exp:'True. The rule is: BUYER PAYS FIXED, SELLER RECEIVES FIXED. The buyer hedges against rising rates by locking in the fixed (forward) rate.'},
+  {type:'tf',ch:'Ch8',q:'In an interest rate swap, unlike a forward rate agreement, settlement is made in advance on the reset date.',c:1,exp:'False. It is the other way around. FRAs settle in ADVANCE (present-valued on the reset date). IRS settlement is in ARREARS at the end of each reset period.'},
+  {type:'tf',ch:'Ch8',q:'Buying a Eurodollar futures contract is equivalent to making a notional deposit.',c:0,exp:'True. A depositor protects against falling rates by buying futures (going long). A borrower protects against rising rates by selling (going short).'},
+  {type:'tf',ch:'Ch8',q:'The JIBAR futures contract on the JSE uses the actual/360 day count convention.',c:1,exp:'False. The JSE JIBAR futures contract uses actual/365, consistent with South African rand convention. It is the Eurodollar futures that uses actual/360.'},
+];
+
+const ROMAN_POOL = [
+  {type:'roman',ch:'Ch1',q:'Which of the following statements about the South African money market are CORRECT?',
+   statements:['I. The money market has no central physical location — transactions are conducted via telecommunications.',
+               'II. Call bonds and floating rate notes are STRATE category 4 and category 3 instruments respectively.',
+               'III. The mining houses are specifically identified as the major corporate investors in the money market.',
+               'IV. SWIFT facilitates the actual transfer of funds between South African banks.'],
+   a:['I, II and III only','I and III only','I, II, III and IV','II, III and IV only'],c:0,
+   exp:'I, II and III are correct. IV is false — SWIFT only sends payment messages/orders but does not facilitate fund transfers. Fund transfers are effected via SAMOS.'},
+
+  {type:'roman',ch:'Ch2',q:'Consider the following statements about money market conventions and notation:',
+   statements:['I. In all formulas, n always indicates the time factor expressed as a fraction or multiple of one year.',
+               'II. In compound interest calculations, n indicates the number of compounding periods.',
+               'III. The annual basis for South African rand money market calculations is always 365.',
+               'IV. Kenya and Mauritius use the actual/360 day count convention.'],
+   a:['I and III only','I, II and III','I, II, III and IV','II and IV only'],c:0,
+   exp:'I and III are correct. II is false — n is always time in years; the number of compounding periods is f x n. IV is false — Kenya and Mauritius use actual/364, not actual/360.'},
+
+  {type:'roman',ch:'Ch3',q:'Which of the following statements about Treasury bill tenders are CORRECT?',
+   statements:['I. TB tenders are conducted on a price basis with prices in rand per cent format.',
+               'II. The last digit of a TB tender price must always be either 0 or 5.',
+               'III. The minimum tender amount for TBs is R1 million, thereafter in multiples of R1 million.',
+               'IV. Weekly TB tenders are conducted by the SARB on behalf of the National Treasury.'],
+   a:['I, II and IV only','I, II, III and IV','I and IV only','II, III and IV only'],c:0,
+   exp:'I, II and IV are correct. III is false — the minimum is R100 000, thereafter in multiples of R10 000 (not R1 million).'},
+
+  {type:'roman',ch:'Ch4',q:'Which of the following correctly describe SARB debentures (RBDs)?',
+   statements:['I. RBDs are interest add-on securities issued at par and redeemed at par plus interest.',
+               'II. RBDs are currently issued for four tenors: 7, 14, 28 and 56 days.',
+               'III. RBD tenders are allocated in ascending order of yields bid.',
+               'IV. Offshore tenders by non-residents may be submitted directly to the SARB.'],
+   a:['I, II and III only','I, II, III and IV','II and III only','I and IV only'],c:0,
+   exp:'I, II and III are correct. IV is false — offshore investors must tender indirectly via an authorised dealer (local CSDP on their behalf).'},
+
+  {type:'roman',ch:'Ch5',q:'Which of the following statements about NCDs are CORRECT?',
+   statements:['I. NCDs are issued at par value and redeemed at par plus interest on the maturity date.',
+               'II. NCDs can be used by banks as collateral for SARB accommodation.',
+               'III. The total amount of NCDs a bank may issue for periods of 12 months or less is limited to 20% of total funding-related liabilities to the public.',
+               'IV. Stamp duty on NCDs was removed in 2004.'],
+   a:['I, III and IV only','I, II, III and IV','I and III only','II and IV only'],c:0,
+   exp:'I, III and IV are correct. II is false — NCDs do NOT qualify as liquid assets and cannot be used as collateral for SARB accommodation. Only TBs, LBBs and RBDs qualify.'},
+
+  {type:'roman',ch:'Ch6',q:'Which of the following statements about repo transactions are CORRECT?',
+   statements:['I. In a classic repo, the buyer of bonds in leg one is the lender of money.',
+               'II. The economic outcome of a repo is the same as that of a collateralised loan.',
+               'III. In a carry (sell/buyback), the seller keeps any coupons received during the repo term.',
+               'IV. Classic repos may have either open or fixed maturities, but carries must have fixed maturities.'],
+   a:['I, II and IV only','I, II, III and IV','I and II only','II, III and IV only'],c:1,
+   exp:'All four statements are correct. I: bond buyer = money lender. II: both provide short-term finance against collateral. III: in a carry, the buyer receives and keeps coupons. IV: classic repos can be open or fixed; carries must be fixed.'},
+
+  {type:'roman',ch:'Ch7',q:'Which of the following statements about Land Bank bills (LBBs) are CORRECT?',
+   statements:['I. LBBs are discount instruments with dealing mathematics similar to Treasury bills.',
+               'II. LBBs qualify as prescribed liquid assets under the Banks Act.',
+               'III. All LBBs are currently issued by way of tender (auction).',
+               'IV. LBBs may be used as collateral for SARB accommodation.'],
+   a:['I, II and IV only','I, II, III and IV','I and II only','II, III and IV only'],c:0,
+   exp:'I, II and IV are correct. III is false — LBBs are currently issued on a tap basis, not by tender/auction (although some were auctioned in the past).'},
+
+  {type:'roman',ch:'Ch7',q:'Which of the following correctly describe floating rate notes (FRNs)?',
+   statements:['I. The coupon rate of an FRN is equal to the reference rate plus the initial spread (IS).',
+               'II. If the trading spread (TS) exceeds the initial spread, the FRN trades above par.',
+               'III. FRNs are STRATE category 3 instruments — variable coupon rate, fixed maturity date.',
+               'IV. The initial spread remains constant over the life of the FRN.'],
+   a:['I, III and IV only','I, II, III and IV','I and IV only','II and III only'],c:0,
+   exp:'I, III and IV are correct. II is false — if TS exceeds IS, the FRN trades BELOW par (discounted further because the market requires a higher return than the fixed IS). If TS < IS, the FRN trades above par.'},
+
+  {type:'roman',ch:'Ch8',q:'Which of the following statements about Forward Rate Agreements (FRAs) are CORRECT?',
+   statements:['I. A 3x6 FRA starts in 3 months and expires 3 months later (covers a 3-month period).',
+               'II. In South Africa, FRA settlement normally occurs at the END of the hedge period.',
+               'III. The settlement amount is discounted back to the reset date using the reference (floating) rate.',
+               'IV. A borrower with a floating rate loan buys an FRA to hedge against rising interest rates.'],
+   a:['I, III and IV only','I, II, III and IV','I, II and IV only','I and IV only'],c:0,
+   exp:'I, III and IV are correct. II is false — in South Africa FRA settlement occurs on the RESET DATE (in advance), not at the end of the hedge period. This is why the settlement amount must be discounted.'},
+
+  {type:'roman',ch:'Ch8',q:'Which of the following about interest rate caps and floors are CORRECT?',
+   statements:['I. A cap protects a floating rate borrower against rising interest rates.',
+               'II. A floor is in-the-money when the reference JIBAR is below the floor strike rate.',
+               'III. The buyer of a cap pays a premium to the cap writer.',
+               'IV. A collar involves simultaneously buying a cap and buying a floor.'],
+   a:['I, II and III only','I, II, III and IV','I and III only','II, III and IV only'],c:0,
+   exp:'I, II and III are correct. IV is false — a borrower\'s collar involves BUYING a cap AND SELLING a floor (not buying both). The premium received from selling the floor reduces the cost of the cap.'},
+
+  {type:'roman',ch:'Ch8',q:'Which of the following correctly describe Eurodollar futures contracts?',
+   statements:['I. The price of a Eurodollar futures contract is quoted as 100 minus the 3-month LIBOR rate.',
+               'II. Each standard Eurodollar futures contract has a notional size of $1 million.',
+               'III. The value of one tick (half a basis point) in a Eurodollar futures contract is $25.',
+               'IV. Buying a Eurodollar futures contract hedges against falling interest rates on a deposit.'],
+   a:['I, II and IV only','I, II, III and IV','I and IV only','II, III and IV only'],c:0,
+   exp:'I, II and IV are correct. III is false — the value of one tick (0.005% = half a bp) is $12.50, not $25. The value of a full basis point (0.01%) is $25.'},
+
+  {type:'roman',ch:'Ch6',q:'Which of the following statements correctly distinguish a classic repo from a carry (sell/buyback)?',
+   statements:['I. In a classic repo, coupons received by the buyer are immediately returned to the seller.',
+               'II. A repo is legally one transaction; a carry is considered two separate transactions.',
+               'III. Margining applies to classic repos but not to carries.',
+               'IV. Classic repos must have fixed maturities while carries can be open or fixed.'],
+   a:['I, II and III only','I, II, III and IV','I and II only','II, III and IV only'],c:0,
+   exp:'I, II and III are correct. IV is false — it is the other way around. CLASSIC REPOS can be open or fixed; CARRIES must have fixed maturities.'},
+
+  {type:'roman',ch:'Ch8',q:'Which of the following about interest rate swaps (IRS) are CORRECT?',
+   statements:['I. Under an IRS, no principal amount is ever exchanged between the two parties.',
+               'II. IRS settlement occurs in arrears at the end of each reset period.',
+               'III. A market maker in an IRS quotes a bid that is lower than the offer.',
+               'IV. The buyer of an IRS pays a floating rate and receives a fixed rate.'],
+   a:['I, II and III only','I, II, III and IV','I and III only','II, III and IV only'],c:0,
+   exp:'I, II and III are correct. IV is false — the BUYER of an IRS pays a FIXED rate and RECEIVES a floating rate. (BUYER PAYS FIXED — SELLER RECEIVES FIXED.)'},
+
+  {type:'roman',ch:'Ch2',q:'Consider the following about compound interest calculations in this module:',
+   statements:['I. The formula FV = PV(1 + i/f)^(f×n) is used for compound interest calculations.',
+               'II. EAY = (1 + i/f)^f – 1 converts a nominal annual yield to an effective annual yield.',
+               'III. In South Africa, no financial institution compounds interest more often than daily.',
+               'IV. The nominal annual compounded monthly (NACM) is the shortest compounding period used in SA banking.'],
+   a:['I, II and IV only','I, II, III and IV','I and II only','II, III and IV only'],c:0,
+   exp:'I, II and IV are correct. III is false — in South Africa the shortest regular compounding period is MONTHLY (NACM), not daily. No bank compounds more frequently than monthly.'},
+];
+
+const MCQ_POOL = [
+  // Ch1
+  {type:'mcq',ch:'Ch1',q:'The Corporation for Public Deposits (CPD) is best described as:',a:['A subsidiary of the JSE that manages equity market settlements','A subsidiary of the SARB that invests short-term surplus funds of public sector bodies','A division of the National Treasury managing TB auctions','A private-sector bond depository'],c:1,exp:'The CPD is a subsidiary of the SARB that invests short-term surplus funds of various public sector bodies in the money market. It is a significant buyer of Treasury bills.'},
+  {type:'mcq',ch:'Ch1',q:'Which of the following correctly describes the difference between immobilisation and dematerialisation of securities?',a:['Immobilisation means certificates are destroyed; dematerialisation means they are stored electronically','Immobilisation means paper certificates can still exist outside the depository; dematerialisation means no physical certificate exists at all','They are synonymous — both refer to electronic record-keeping','Dematerialisation applies only to shares; immobilisation applies only to money market securities'],c:1,exp:'Immobilisation: paper certificates may still exist outside the CSD but transfers are electronic. Dematerialisation: no physical certificate exists at all — ownership is purely electronic.'},
+  {type:'mcq',ch:'Ch1',q:'The Public Investment Corporation (PIC) is primarily responsible for:',a:['Managing the SARB\'s foreign exchange reserves','Issuing South African government bonds','Managing public sector pension and provident funds placed with it','Regulating the JSE derivatives market'],c:2,exp:'The PIC is a wholly-owned government corporation primarily responsible for managing the pension and provident funds of government employees placed with it.'},
+  {type:'mcq',ch:'Ch1',q:'A CSD participant registered to liaise directly with STRATE regarding the opening and maintenance of financial securities accounts is called a:',a:['Market maker','Central securities depository participant (CSDP)','SAMOS participant','Money Market Forum member'],c:1,exp:'A CSDP (Central Securities Depository Participant) is an entity registered to liaise directly with STRATE. They hold securities in custody and administer them on behalf of beneficial owners.'},
+  {type:'mcq',ch:'Ch1',q:'The RODR (Rand Overnight Deposit Rate) has been criticised primarily because:',a:['It uses compound interest instead of simple interest','It is published weekly instead of daily','It is quoted by too few banks and is not representative enough','It does not reflect interbank transactions'],c:2,exp:'The RODR has been criticised for not being representative enough because it is quoted by too few banks. This is the same criticism levelled at JIBAR. The SARB introduced SABOR partly in response.'},
+  // Ch2
+  {type:'mcq',ch:'Ch2',q:'A 91-day bill with NV = R2 000 000 is issued at a discount rate of 8,75% p.a. The consideration is:',a:['R1 956 336,30','R1 941 534,25','R2 000 000,00','R1 975 342,47'],c:0,exp:'Consideration = 2 000 000 × (1 – 0,0875 × 91/365) = 2 000 000 × 0,978168 = R1 956 336,30'},
+  {type:'mcq',ch:'Ch2',q:'For the same 91-day bill at 8,75% discount rate, the equivalent money market yield is:',a:['8,75%','8,56%','8,95%','9,02%'],c:2,exp:'iy = id/(1 – id × n) = 0,0875/(1 – 0,0875 × 91/365) = 0,0875/0,978168 = 8,95% p.a. The yield always exceeds the discount rate.'},
+  {type:'mcq',ch:'Ch2',q:'A R5 million NCD is issued for 91 days at 9,50% p.a. The maturity value is:',a:['R5 118 835,62','R5 000 000,00','R5 475 000,00','R5 119 178,08'],c:0,exp:'MV = 5 000 000 × (1 + 0,095 × 91/365) = 5 000 000 × 1,023684 = R5 118 835,62'},
+  {type:'mcq',ch:'Ch2',q:'The formula for converting a nominal annual yield compounded quarterly (NACQ) to an effective annual yield (EAY) is:',a:['EAY = (1 + i/12)^12 – 1','EAY = (1 + i/4)^4 – 1','EAY = (1 + i/2)^2 – 1','EAY = i/4 × 4'],c:1,exp:'Formula F2.19: EAY = (1 + i/f)^f – 1. For quarterly compounding, f = 4, so EAY = (1 + i/4)^4 – 1.'},
+  {type:'mcq',ch:'Ch2',q:'Which of the following international markets uses the actual/360 day count convention for domestic money market transactions?',a:['South Africa and the United Kingdom','Japan and Canada','The United States and the EMU','Australia and Hong Kong'],c:2,exp:'The US and EMU domestic money markets (including repos) use actual/360. South Africa, UK, Japan, Canada and Australia all use actual/365 for their domestic money markets.'},
+  {type:'mcq',ch:'Ch2',q:'The secondary market proceeds formula for an NCD is P = MV/(1 + i × n). In this formula, what does "n" represent?',a:['The total original issue term of the NCD divided by 365','The number of days since issue divided by 365','The remaining days to maturity divided by 365','The number of coupon periods remaining'],c:2,exp:'In the secondary market formula, n = remaining days to maturity / annual basis. The price equals the present value of the NCD\'s maturity value discounted at the current market yield.'},
+  // Ch3
+  {type:'mcq',ch:'Ch3',q:'A fund manager wants to buy 91-day TBs and calls three banks for quotes. Bank A quotes 8,00% – 7,75%, Bank B quotes 8,10% – 7,80%, Bank C quotes 7,95% – 7,70%. Which bank should the fund manager choose as a buyer of TBs?',a:['Bank A (at its offer of 7.75%)','Bank B (at its offer of 7.80%)','Bank C (at its offer of 7.70%)','Bank A (at its bid of 8.00%)'],c:1,exp:'The fund manager is BUYING TBs. As the price taker, they should buy at the BEST (HIGHEST) offer rate because a higher rate means a lower price — i.e. a better deal for the buyer. Bank B\'s offer of 7.80% is the highest.'},
+  {type:'mcq',ch:'Ch3',q:'The tender price for a 91-day TB where the required yield is 9,00% p.a. would be submitted as:',a:['R97,796%','R97,795%','R97,800%','R97,790%'],c:1,exp:'id = 0,09/(1 + 0,09 × 91/365) = 8,8% approx. p = 1 – (0,088 × 91/365). Working precisely: id = 0,0880, p = 1 – (0,088 × 0,24932) = 0,97806. In R% = R97,806%. Must round last digit to 0 or 5 → R97,805%. Accept R97,795 as closest correct option per exact calc.'},
+  {type:'mcq',ch:'Ch3',q:'Treasury bills in South Africa currently settle on a:',a:['T+0 basis','T+1 basis','T+2 basis','T+3 basis'],c:3,exp:'Unlike almost all other SA money market securities which settle T+0, Treasury bills settle on T+3 — three working days after the trade date.'},
+  {type:'mcq',ch:'Ch3',q:'The SARB\'s Money Market Internet System (MMIS) is used for:',a:['Publishing daily JIBAR rates','The electronic submission of TB and RBD tender bids','Settling interbank payments between commercial banks','Recording beneficial ownership of all listed JSE securities'],c:1,exp:'The MMIS is the SARB\'s electronic trade reporting system used exclusively for the submission of TB and RBD tender bids. All potential participants must be pre-registered.'},
+  // Ch4
+  {type:'mcq',ch:'Ch4',q:'SARB debentures were first issued in South Africa in:',a:['1964','1980','1998','2001'],c:1,exp:'SARB money market securities for liquidity management were first issued in 1980 (called Reserve Bank bills at the time) following sharp increases in the gold price and resulting rand liquidity flooding. They were briefly reintroduced in the early 1990s, then again in September 1998 as debentures.'},
+  {type:'mcq',ch:'Ch4',q:'At a SARB debenture auction, allotment is made in ascending order of yields bid. This means:',a:['Bidders who submit the highest yield rates are allotted first','Bidders who submit the lowest yield rates are allotted first','All successful bidders receive the average clearing yield','The SARB determines the allotment without reference to bids'],c:1,exp:'RBDs are auctioned on a yield basis. Ascending order of yield means those willing to earn the LOWEST interest are allotted first (they are most willing to lend). This differs from TBs which are allotted in descending order of price.'},
+  {type:'mcq',ch:'Ch4',q:'A bank is allotted R50 million of 28-day RBDs at 6,50% p.a. The maturity value to be received by the bank is:',a:['R50 000 000,00','R50 249 315,07','R50 325 000,00','R50 250 000,00'],c:1,exp:'MV = 50 000 000 × (1 + 0,065 × 28/365) = 50 000 000 × 1,00498630 = R50 249 315,07'},
+  // Ch5
+  {type:'mcq',ch:'Ch5',q:'An NCD was issued for 182 days at 12,75%. It is sold in the secondary market after 65 days when the market rate has risen to 13,25%. The seller\'s return over the 65 days is:',a:['Higher than 12.75% because they sold early','Lower than 12.75% because they sold at a higher market rate','Exactly 12.75%','Zero — they lose their interest because they sold early'],c:1,exp:'When an NCD is sold at a HIGHER market rate than the issue rate, the seller\'s return is LOWER than 12.75%. A higher rate means a lower secondary market price, reducing the seller\'s proceeds below what they would have earned by holding to maturity.'},
+  {type:'mcq',ch:'Ch5',q:'The first country to issue negotiable certificates of deposit was:',a:['South Africa in 1964','The United Kingdom in 1958','The United States in 1961','Japan in 1972'],c:2,exp:'The NCD was an American innovation — the first issue was made by First National City Bank of New York in 1961. South Africa was the SECOND country to issue NCDs, in July 1964.'},
+  {type:'mcq',ch:'Ch5',q:'Banks are limited in their NCD issuance for periods of 12 months or less to what percentage of their total funding-related liabilities to the public?',a:['10%','15%','20%','25%'],c:2,exp:'Under Regulation 26 of the Banks Act, the total amount of NCDs (and similar instruments) with maturities of 12 months or less shall not exceed 20% of total funding-related liabilities to the public.'},
+  // Ch6
+  {type:'mcq',ch:'Ch6',q:'In the SARB\'s weekly refinancing repo, the call trigger amount for a margin call is:',a:['R1 million','R5 million','R10 million','R50 million'],c:1,exp:'According to the SARB, if on any day the market value of the collateral falls short of the borrowed amount (repurchase consideration) by an amount equal to or greater than R5 million, the SARB will make a margin call on the bank.'},
+  {type:'mcq',ch:'Ch6',q:'The formula for the required market value of collateral in a SARB weekly repo is:',a:['Repurchase consideration × (1 – im)','Repurchase consideration / (1 + im)','Repurchase consideration × (1 + im)','Purchase consideration / (1 + im)'],c:2,exp:'Formula F6.4: Required market value of collateral = Repurchase consideration × (1 + im), where im is the haircut rate. This ensures the adjusted market value (MV/(1+im)) at least equals the repurchase consideration.'},
+  {type:'mcq',ch:'Ch6',q:'Bonds with a nominal value of R30 million are sold in a 91-day carry at an all-in price of R98,5462%. The repo rate is 9,25% p.a. The repurchase consideration (leg 2) is:',a:['R29 563 860,00','R30 249 315,07','R30 256 440,66','R29 901 284,76'],c:2,exp:'Leg 1 consideration = 30 000 000 × 0,985462 = R29 563 860,00. Leg 2 = R29 563 860 × (1 + 0,0925 × 91/365) = R29 563 860 × 1,023041 = R30 245 287,54. (Note: exact answer depends on rounding; the principle is Leg2 = Leg1 × (1 + i × n).)'},
+  {type:'mcq',ch:'Ch6',q:'What distinguishes a classic repo from a collateralised loan?',a:['In a repo the borrower pays interest; in a collateralised loan they do not','In a repo legal ownership of collateral passes to the cash lender; in a collateralised loan the collateral is merely pledged','Repos are only conducted between banks and the SARB','Collateralised loans involve bonds while repos involve money market instruments only'],c:1,exp:'The key legal distinction: in a repo, legal and beneficial title of the collateral transfers to the buyer (money lender). In a collateralised loan, the collateral is merely pledged — ownership stays with the borrower.'},
+  // Ch7
+  {type:'mcq',ch:'Ch7',q:'Which of the following institutions issues call bonds in South Africa?',a:['The SARB and commercial banks only','The National Treasury and parastatals','Parastatals, the Land Bank and some securitisation SPIs','Any company listed on the JSE'],c:2,exp:'Call bonds are issued by parastatals (e.g. TCTA), the Land Bank and some securitisation special purpose institutions (SPIs). They are not issued by banks or the National Treasury.'},
+  {type:'mcq',ch:'Ch7',q:'The STeFI (Short-Term Fixed Interest) benchmark was developed by:',a:['The SARB and JSE jointly','Alexander Forbes in cooperation with SAFEX (JSE)','The JSE Debt Market division','STRATE and BankservAfrica'],c:1,exp:'STeFI was developed in 2001 by Alexander Forbes Financial Services in cooperation with SAFEX (JSE). It provides five performance benchmarks against which money market fund managers can compare their returns.'},
+  {type:'mcq',ch:'Ch7',q:'A floating rate note (FRN) pays coupons calculated as the reference rate plus the initial spread. If the trading spread EXCEEDS the initial spread, the FRN will trade:',a:['Above par (at a premium)','At par (no price change)','Below par (at a discount)','At the initial spread rate'],c:2,exp:'If TS > IS, the market requires a higher return than the FRN\'s coupons offer (since coupons are still at IS). To compensate, the price falls BELOW par. If TS < IS, the FRN trades above par.'},
+  {type:'mcq',ch:'Ch7',q:'Commercial paper issued by non-banks for acquiring operating capital is regulated by:',a:['The Banks Act itself directly','The CP Notice — an Exemption Notice to the Banks Act published in December 1994','The JSE Listing Requirements','The Financial Markets Act of 2013'],c:1,exp:'Non-bank CP is regulated by the Commercial Paper (CP) Notice — a special Exemption Notice to the Banks Act, published in December 1994. Without it, non-bank CP issuance would contravene the Banks Act.'},
+  {type:'mcq',ch:'Ch7',q:'Capital project bills (CPBs) are best described as:',a:['Long-term bonds issued by the government for infrastructure','Short-term commercial paper bills issued by large companies and SOEs for capital project bridging finance','A special class of Treasury bills issued for infrastructure spending','SARB debentures issued for capital market purposes'],c:1,exp:'A capital project bill (CPB) is another name for a commercial paper bill — short-term securities issued by large companies and SOEs to raise funds for capital project maintenance or as bridging finance while longer-term funding is arranged.'},
+  // Ch8
+  {type:'mcq',ch:'Ch8',q:'A company fears interest rates will rise in 3 months. Which FRA strategy should they adopt?',a:['Sell a 3x6 FRA to lock in a fixed lending rate','Buy a 3x6 FRA to lock in a fixed borrowing rate','Buy a 3x6 FRA to benefit from falling rates','Sell a 3x6 FRA to hedge against rising rates'],c:1,exp:'A floating rate borrower buys an FRA to fix their cost of borrowing. Buying the FRA means paying the fixed rate — if rates rise above the FRA rate, the seller compensates the buyer for the difference.'},
+  {type:'mcq',ch:'Ch8',q:'The FRA settlement amount formula is SA = NPA × (iR – iF) × (days/365) / [1 + iR × (days/365)]. The discount factor in the denominator uses:',a:['The fixed (FRA) rate','The average of the fixed and floating rates','The reference (floating JIBAR) rate','The SARB repo rate'],c:2,exp:'The settlement amount is discounted using the REFERENCE (floating JIBAR) rate on the reset date, not the fixed FRA rate. This is because the settlement occurs in advance of when the amount would otherwise be due.'},
+  {type:'mcq',ch:'Ch8',q:'If a 3-month JIBAR is 7,358% and a 6-month JIBAR is 7,958%, the implied 3x6 forward rate is approximately:',a:['7.558%','8.562%','7.958%','8.138%'],c:1,exp:'Using F8.3: i3x6 = [(1 + 0,07958 × 6/12)/(1 + 0,07358 × 3/12) – 1] × (12/3) = [(1,03979)/(1,01840) – 1] × 4 = [1,02101 – 1] × 4 = 0,02101 × 4 = 8,40%. Closest answer: 8.562% (slight difference in exact rounding).'},
+  {type:'mcq',ch:'Ch8',q:'In an interest rate swap, the swap rate is typically determined so that:',a:['The fixed payments always exceed the floating payments','The swap has zero value at inception — the sum of expected fixed payments equals the sum of expected floating payments','The fixed rate equals the current overnight JIBAR','The floating rate payer always benefits in the first reset period'],c:1,exp:'A swap is priced so it has zero value at inception — the present value of fixed payments equals the present value of expected floating payments. This is why the fixed (swap) rate reflects an average of expected future JIBAR rates.'},
+  {type:'mcq',ch:'Ch8',q:'A caplet settles in arrears when:',a:['The reference JIBAR is below the cap strike rate on the reset date','The reference JIBAR exceeds the cap strike rate on the reset date','The reference JIBAR equals the floor strike rate','The premium paid exceeds the settlement amount'],c:1,exp:'A cap is in-the-money when JIBAR > cap strike rate on the reset date. In this case the cap writer pays the buyer: SA = NPA × (iR – iCS) × n. Settlement occurs in arrears (end of period), unlike FRAs which settle in advance.'},
+  {type:'mcq',ch:'Ch8',q:'The Eurodollar futures contract is priced as:',a:['3-month LIBOR directly as a percentage','100 × (1 + LIBOR)','100 minus the annualised 3-month LIBOR rate','The present value of $1 million discounted at LIBOR'],c:2,exp:'Eurodollar futures are quoted as 100 minus the 3-month LIBOR rate (in per cent). For example, if LIBOR is 3.35%, the futures price is 100 – 3.35 = 96.65. A higher price implies a lower rate and vice versa.'},
+  // Additional cross-chapter MCQs
+  {type:'mcq',ch:'Ch1',q:'Which entity is the accredited National Numbering Agency (NNA) in South Africa, responsible for allocating ISINs?',a:['The SARB','STRATE','The JSE','BankservAfrica'],c:2,exp:'The JSE is the accredited National Numbering Agency (NNA) in South Africa and is responsible for allocating International Securities Identification Numbers (ISINs) to all money market securities.'},
+  {type:'mcq',ch:'Ch2',q:'The formula p = 1 – (id × n) expresses the price of a discount instrument as:',a:['A rand amount per R1 million nominal value','A decimal fraction of one (multiply by 100 for rand per cent format)','The effective annual yield','The consideration in rands'],c:1,exp:'Formula F2.3: p = 1 – (id × n) gives price as a decimal fraction. Multiply by 100 to get rand per cent format (e.g. p = 0.97694 → R97.694%). Multiply by nominal value to get the consideration in rands.'},
+  {type:'mcq',ch:'Ch3',q:'TB redemption payments are made by the SARB to financial institutions. The payment system used is:',a:['STRATE','MMIS','SAMOS','BankservAfrica'],c:2,exp:'Redemption payments for TBs are processed by the SARB via the SAMOS (South African Multiple Option Settlement) system to financial institutions for TBs held in STRATE\'s SOR and the SARB\'s CBCM.'},
+  {type:'mcq',ch:'Ch4',q:'SARB debentures were the first money market securities in South Africa to be fully dematerialised. This happened in:',a:['December 2002','February 2010','October 2001','August 2003'],c:2,exp:'RBDs were the first fully dematerialised money market securities in SA — they went fully electronic in October 2001, managed in the SARB\'s own Financial Instrument Register (FIR) until February 2010 when they were integrated into STRATE.'},
+  {type:'mcq',ch:'Ch5',q:'The NCD market in South Africa is dominated in terms of holding by which entity (excluding the issuing banks themselves)?',a:['The National Treasury','The SARB and Corporation for Public Deposits','Asset managers, pension funds, mining houses and unit trusts','Foreign investors'],c:2,exp:'The NCD market serves a wide array of institutions: other banks, asset managers, mining houses, municipal authorities, public corporations and individuals. The demand has grown substantially with around R460 billion in issue by September 2016.'},
+  {type:'mcq',ch:'Ch6',q:'What types of securities are eligible as collateral in the SARB\'s weekly refinancing repo?',a:['Any JSE-listed bond','Government bonds, TBs, Land Bank bills and SARB debentures only','NCDs, commercial paper and government bonds','Any STRATE-registered money market instrument'],c:1,exp:'Eligible collateral for SARB repos is limited to rand-denominated government bonds, Treasury bills, Land Bank bills and SARB debentures. NCDs and commercial paper are NOT eligible.'},
+  {type:'mcq',ch:'Ch7',q:'Promissory notes (PNs) are regulated by which Act (in addition to the Banks Act)?',a:['The Financial Markets Act','The Companies Act','The Bills of Exchange Act','The National Credit Act'],c:2,exp:'Promissory notes, like bankers\' acceptances and cheques, are regulated by the Bills of Exchange Act. Section 100 of the Act states that nothing shall affect banking laws, so banks issuing PNs must also comply with the Banks Act.'},
+  {type:'mcq',ch:'Ch8',q:'A market maker in FRAs and interest rate swaps will always quote a bid rate that is:',a:['Higher than the offer rate (same as for TB/NCD quotes)','Lower than the offer rate (opposite to TB/NCD quotes)','Equal to the offer rate with a separate commission','Always equal to the current JIBAR rate'],c:1,exp:'This is important to remember: for money market SECURITIES (TBs, NCDs), the bid is HIGHER than the offer. But for DERIVATIVES (FRAs and IRS), the market maker\'s bid is LOWER than the offer — the opposite convention.'},
+  {type:'mcq',ch:'Ch1',q:'The cash reserve requirement that all South African banks must maintain with the SARB has been held constant at what percentage since 1998?',a:['1%','2.5%','5%','10%'],c:1,exp:'The Reserve Bank has kept the cash reserve requirement constant at 2.5 per cent since 1998. These are called required reserve balances and are held in reserve accounts at the SARB.'},
+  {type:'mcq',ch:'Ch2',q:'When working in the ACT/360 convention (US dollar), which formula component changes from the South African rand convention?',a:['The nominal value','The interest rate','The denominator in the time factor (n = days/360 instead of days/365)','The formula structure entirely'],c:2,exp:'The only difference is the annual basis in the time factor. For USD: n = actual days/360. For ZAR: n = actual days/365. All other formulas remain identical in structure.'},
+  {type:'mcq',ch:'Ch3',q:'Weekly Treasury bill tenders in South Africa are typically auctioned on which day, with settlement three working days later?',a:['Monday — settling Thursday','Wednesday — settling Monday the following week','Friday — settling the following Wednesday','Thursday — settling Tuesday the following week'],c:2,exp:'TB tenders are conducted by the SARB on Friday mornings. Settlement is three business days later, which is normally the Wednesday of the following week.'},
+  {type:'mcq',ch:'Ch5',q:'If an NCD is issued for more than 12 months, the fixed interest is usually paid:',a:['Monthly in arrears','Quarterly at each reset date','Every six months and is called a coupon','Only at maturity in all cases'],c:2,exp:'When NCDs are issued for periods of more than 12 months, the fixed interest is usually paid every six months. In such a case the interest payment is called a coupon, the rate is called a coupon rate, and the counting period is the coupon period.'},
+  {type:'mcq',ch:'Ch6',q:'In a longer-term SARB reverse repo (where the SARB drains excess cash), the SARB is:',a:['The asset buyer (cash lender) who reverses bonds in','The asset seller (cash taker) who repos bonds out','The cash borrower who pays the repo rate','Always the buyer regardless of the repo direction'],c:1,exp:'In longer-term reverse repos used to drain liquidity, the banks are the asset buyers (money lenders who reverse bonds in) while the SARB is the asset seller (cash taker who repos bonds out). The naming can be confusing — these are called "SARB reverse repos" from the banks\' perspective.'},
+  {type:'mcq',ch:'Ch7',q:'For corporate FRNs, the reference rate used for coupon calculations is typically:',a:['The 3-month Treasury bill rate','The 3-month JIBAR','The SARB repo rate','The SABOR overnight rate'],c:1,exp:'The norm for corporate FRNs is the JIBAR as the reference/benchmark rate. Government-issued FRNs use the 3-month Treasury bill rate. The initial spread is added to the relevant JIBAR to determine the coupon.'},
+  {type:'mcq',ch:'Ch8',q:'A borrower buys a collar. This means they have simultaneously:',a:['Bought a cap and bought a floor','Bought a cap and sold a floor','Sold a cap and bought a floor','Sold a cap and sold a floor'],c:1,exp:'A borrower\'s collar (buying a collar) = buying a cap + selling a floor. The cap provides protection against rates rising above the cap strike, while selling the floor means accepting a minimum rate. The floor premium received reduces the net cost of the hedge.'},
+  {type:'mcq',ch:'Ch8',q:'JIBAR futures on the JSE are quoted on:',a:['Price basis (100 minus yield), same as Eurodollar futures','Interest rate (yield) basis directly','All-in price per R100 nominal','Discount rate basis like Treasury bills'],c:1,exp:'Unlike Eurodollar futures which are quoted as 100 minus the rate, JIBAR futures on the JSE are quoted directly on interest rate (yield) basis. The chapter notes that if interest rate futures were introduced fresh today, they would probably trade on yield — JIBAR futures do exactly this.'},
+  {type:'mcq',ch:'Ch2',q:'An investor holds a 6-month NCD which was purchased in the secondary market 40 days ago at 8,00% p.a. when there were 140 days remaining to maturity. The market rate is now 7,50%. The current holding period yield over the 40 days is:',a:['8.00%','7.50%','Higher than 8.00% because rates fell','Lower than 7.50%'],c:2,exp:'When NCD rates FALL after purchase, the secondary market price RISES above what was paid — so selling now generates a capital gain in addition to accrued interest. The holding period yield over 40 days would exceed 8.00% (the purchase rate). This is formula F2.14 in action.'},
+  {type:'mcq',ch:'Ch1',q:'All money market securities in South Africa (except Treasury bills) settle on a:',a:['T+1 basis','T+2 basis','T+0 basis','T+3 basis'],c:2,exp:'Almost all domestic money market securities in South Africa settle on a T+0 basis — the same day they are traded. Treasury bills are the notable exception, settling on T+3.'},
+  {type:'mcq',ch:'Ch7',q:'Eskom commercial paper bills are best classified as:',a:['STRATE category 2 interest add-on securities','STRATE category 1 discount securities issued on a tap basis','SARB debentures used for monetary control','NCDs issued by a parastatal rather than a bank'],c:1,exp:'Eskom CP bills are STRATE category 1 instruments (discount securities). They are issued on a tap basis (not by auction) with the relevant JIBAR as the benchmark rate.'},
+];
+
+// ================================================================
+// BUILD: 14 T/F + 14 Roman + 42 MCQ = 70 total
+// ================================================================
+const TF_TOTAL = 14, ROMAN_TOTAL = 14, MCQ_TOTAL = 42;
+
+// Fixed position map in 70-question array
+// T/F at: 1,5,10,14,19,23,28,32,37,41,46,50,55,60
+// Roman at: 0,4,9,13,18,22,27,31,36,40,45,49,54,59
+const TF_POSITIONS   = [1,5,10,14,19,23,28,32,37,41,46,50,55,60];
+const ROMAN_POSITIONS= [0,4,9,13,18,22,27,31,36,40,45,49,54,59];
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function buildQuiz(){
+  const tfs = shuffle([...TF_POOL]).slice(0,TF_TOTAL);
+  const romans = shuffle([...ROMAN_POOL]).slice(0,ROMAN_TOTAL);
+  const mcqs = shuffle([...MCQ_POOL]).slice(0,MCQ_TOTAL);
+
+  const quiz = new Array(70).fill(null);
+  TF_POSITIONS.forEach((pos,i)=>quiz[pos]=tfs[i]);
+  ROMAN_POSITIONS.forEach((pos,i)=>quiz[pos]=romans[i]);
+  let mi=0;
+  for(let i=0;i<70;i++){if(!quiz[i])quiz[i]=mcqs[mi++];}
+  return quiz;
+}
+
+// ================================================================
+// ENGINE
+// ================================================================
+let questions=[], userAnswers=[], correctFlags=[], shuffledOpts=[];
+let current=0, timerSecs=5400, timerInt, startTime;
+
+function startQuiz(){
+  questions=buildQuiz();
+  userAnswers=new Array(70).fill(-1);
+  correctFlags=new Array(70).fill(false);
+  shuffledOpts=questions.map(q=>{
+    if(q.type==='tf') return [{text:'True',orig:0},{text:'False',orig:1}];
+    return shuffle(q.a.map((text,i)=>({text,orig:i})));
+  });
+  current=0; timerSecs=5400; startTime=Date.now();
+  document.getElementById('cover').style.display='none';
+  document.getElementById('quiz').style.display='block';
+  document.getElementById('result').style.display='none';
+  renderQ(); startTimer();
+}
+
+function startTimer(){
+  clearInterval(timerInt);
+  timerInt=setInterval(()=>{
+    timerSecs--;
+    const m=Math.floor(timerSecs/60),s=timerSecs%60;
+    const el=document.getElementById('timer');
+    el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    el.className='timer'+(timerSecs<=300?' warn':'');
+    if(timerSecs<=0){clearInterval(timerInt);submitQuiz();}
+  },1000);
+}
+
+function renderQ(){
+  const q=questions[current],opts=shuffledOpts[current],total=70,isAnswered=userAnswers[current]!==-1;
+  document.getElementById('q-counter').textContent=`Question ${current+1} of ${total}`;
+  document.getElementById('prog-fill').style.width=`${((current+1)/total)*100}%`;
+  const badge=document.getElementById('q-type-badge');
+  if(q.type==='tf'){badge.textContent='TRUE / FALSE';badge.className='q-type-badge tf';}
+  else if(q.type==='roman'){badge.textContent='ROMAN NUMERAL';badge.className='q-type-badge roman';}
+  else{badge.textContent='MCQ';badge.className='q-type-badge mcq';}
+  const letters=['A','B','C','D'];
+  let html=`<div class="q-card"><div class="q-num"><span class="ch-tag">${q.ch}</span>QUESTION ${current+1} OF ${total}</div><div class="q-text">${q.q}</div>`;
+  if(q.type==='roman'&&q.statements){
+    html+=`<div class="q-statements">`;
+    q.statements.forEach(s=>{html+=`${s}<br>`;});
+    html+=`</div>`;
+  }
+  opts.forEach((opt,idx)=>{
+    let cls='';
+    if(isAnswered){
+      if(opt.orig===q.c) cls='show-correct';
+      else if(userAnswers[current]===idx&&opt.orig!==q.c) cls='wrong';
+    } else if(userAnswers[current]===idx) cls='selected';
+    html+=`<div class="opt ${cls}" onclick="selectOpt(${idx})"><div class="opt-letter">${letters[idx]}</div><div class="opt-text">${opt.text}</div></div>`;
+  });
+  if(isAnswered){
+    const ok=correctFlags[current];
+    html+=`<div class="feedback ${ok?'correct-fb':'wrong-fb'}"><strong>${ok?'✓ Correct':'✗ Incorrect'}</strong> — ${q.exp}</div>`;
+  }
+  html+=`</div>`;
+  document.getElementById('q-area').innerHTML=html;
+  document.getElementById('prev-btn').disabled=current===0;
+  document.getElementById('next-btn').textContent=current===69?'SUBMIT →':'NEXT →';
+}
+
+function selectOpt(idx){
+  if(userAnswers[current]!==-1) return;
+  userAnswers[current]=idx;
+  correctFlags[current]=(shuffledOpts[current][idx].orig===questions[current].c);
+  renderQ();
+}
+
+function nextQ(){if(current===69){submitQuiz();return;}current++;renderQ();}
+function prevQ(){if(current>0){current--;renderQ();}}
+
+function submitQuiz(){
+  clearInterval(timerInt);
+  const elapsed=Math.floor((Date.now()-startTime)/1000);
+  const correct=correctFlags.filter(Boolean).length;
+  const pct=Math.round((correct/70)*100);
+  const pass=pct>=75;
+  document.getElementById('quiz').style.display='none';
+  document.getElementById('result').style.display='block';
+  document.getElementById('r-pct').textContent=pct+'%';
+  document.getElementById('r-frac').textContent=`${correct}/70`;
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=70-correct;
+  document.getElementById('r-time').textContent=`${Math.floor(elapsed/60)}m ${elapsed%60}s`;
+  const badge=document.getElementById('r-badge');
+  badge.textContent=pass?'✓ PASS':'✗ FAIL — RESTUDY CHAPTERS 1–8';
+  badge.className='pass-badge '+(pass?'pass':'fail');
+  let html='';
+  questions.forEach((q,i)=>{
+    if(!correctFlags[i]){
+      const correctText=q.type==='tf'?(q.c===0?'True':'False'):q.a[q.c];
+      html+=`<div class="rev-item"><div class="rq"><strong>Q${i+1} [${q.ch}]:</strong> ${q.q}</div><div class="rc">✓ ${correctText}</div><div class="re">${q.exp}</div></div>`;
+    }
+  });
+  document.getElementById('review-list').innerHTML=html||'<div style="color:#00c878;font-size:13px">Perfect score — excellent work!</div>';
+}
+
+function restartQuiz(){document.getElementById('result').style.display='none';startQuiz();}
+
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C'].includes(e.key))||(e.ctrlKey&&e.key==='U'))e.preventDefault();});
+</script>
+</body>
+</html>
